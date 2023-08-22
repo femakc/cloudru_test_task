@@ -1,0 +1,45 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: cloud-ru-test-task
+  labels:
+    app : my-k8s-application
+#  namespace: my-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: kgb
+  template:
+    metadata:
+      labels:
+        project: kgb
+    spec:
+      containers:
+        - name : kgb-web
+#          image: nginx:1.14.2
+          image: femakc/test_cloudru:latest
+#          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: server_host
+              value: "0.0.0.0"
+          ports:
+            - containerPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-single-pod-service
+  labels:
+    owner: Max
+spec:
+  selector:
+    project: kgb
+  ports:
+    - name      : app-listener
+      protocol  : TCP
+      port      : 8000
+      targetPort: 8000
+  type: LoadBalancer
