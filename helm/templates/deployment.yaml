@@ -1,0 +1,44 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app : {{ .Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      project: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        project: {{ .Release.Name }}
+    spec:
+      containers:
+        - name : {{ .Release.Name }}-web
+          image: {{ .Values.container.image}}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: UID # fixed
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            - name: AUTHOR # fixed
+              value: {{ .Values.author.name }}
+          ports:
+            - containerPort: 8000
+
+#          livenessProbe:
+#            httpGet:
+#              path: /author
+#              port: 8000
+#            initialDelaySeconds: 10
+#            periodSeconds: 10
+#
+#          readinessProbe:
+#            httpGet:
+#              path: /hostname
+#              port: 8000
+#            initialDelaySeconds: 10
+#            periodSeconds: 10

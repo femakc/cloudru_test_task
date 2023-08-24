@@ -1,0 +1,10 @@
+container:
+  image: femakc/test_cloudru:test1
+
+replicaCount: 3
+
+namespace: cloudru
+
+author:
+    name: Maxim_Fedorov
+#    email: femakc@yandex.ru
