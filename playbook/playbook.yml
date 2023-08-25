@@ -1,0 +1,26 @@
+---
+- name  : Test connection to servers
+  hosts : all
+  become: yes
+
+  vars:
+    ansible_become_pass : !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          39646465643632373230633338303539323239343934663463333536303361383633346138306333
+          3662323234613834643232633437306163383733633866370a656438613138663666356331383864
+          33666634323030313164623263313765626162656130373734653338326336376537336132616138
+          3931343030343965390a613636643938366464306634333734323930633934356262653562393665
+          3335
+    username            : cloudru
+    userpassword        : cloudpass
+
+  tasks:
+    - name: Ping my servers
+      ping:
+
+    - name: Create user with password
+      ansible.builtin.user:
+        name: cloudru
+#          var: username
+        password: cloudpass
+#          var: userpassword
