@@ -1,0 +1,42 @@
+---
+- name  : create new user
+  hosts : all
+  become: yes
+
+  vars_files:
+    - vault
+
+  tasks:
+    - name: Ping my servers
+      ping:
+
+    - name: Create user "{{ username }}"
+      user:
+        name    : "{{ username }}"
+        password: "{{ password | password_hash }}"
+        shell   : /bin/bash
+        groups  : "{{ username }}"
+        append  : yes
+
+    - name: Copy authorized key from id_rsa.pub
+      authorized_key:
+        user        : "{{ username }}"
+        state       : present
+        key         : "{{ lookup('file', lookup('env','HOME') + '/Dev/cloudru_test_task/playbook/ssh_keys/id_rsa.pub') }}"
+#        key         : "{{ lookup('file', lookup('env','HOME') + '<Прописать путь>/playbook/ssh_keys/id_rsa.pub') }}"
+
+    - name:  Disable allow login only with publickey.publickey
+      lineinfile:
+        dest    : /etc/ssh/sshd_config
+        regexp  : "^#?AuthenticationMethods"
+        line    : "AuthenticationMethods publickey"
+
+    - name: Disable Root login
+      lineinfile:
+        dest   : /etc/ssh/sshd_config
+        regexp : "^#?PermitRootLogin"
+        line   : "PermitRootLogin no"
+
+    - name   : restart sshd
+      service: name=sshd state=restarted
+

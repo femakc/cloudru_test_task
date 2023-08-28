@@ -1,5 +1,5 @@
 container:
-  image: femakc/test_cloudru:test1
+  image: femakc/test_cloudru:r_v1
 
 replicaCount: 3
 
@@ -7,4 +7,4 @@ namespace: cloudru
 
 author:
     name: Maxim_Fedorov
-#    email: femakc@yandex.ru
+

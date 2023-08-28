@@ -6,32 +6,24 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-RESULT_DICT = {
-    "HOSTNAME": socket.gethostname(),
-    "AUTHOR": "!!!ANONYMOUS!!!",
-    "UID": "!!!UID!!!"
-               }
-
-
-for key in os.environ:
-    RESULT_DICT[key] = os.environ[key]
-
-
-@app.get("/")
-def get_all():
-    return json.dumps(RESULT_DICT, indent=4)
+def find_to_env(name: str) -> str:
+    result = "No content :("
+    if name.upper() in os.environ:
+        result = os.environ[name.upper()]
+    return result
 
 
 @app.get("/hostname")
 def get_hostname():
-    return RESULT_DICT["HOSTNAME"]
+    result = socket.gethostname()
+    return result
 
 
 @app.get("/author")
 def get_author():
-    return RESULT_DICT["AUTHOR"]
+    return find_to_env("author")
 
 
 @app.get("/id")
 def get_id():
-    return RESULT_DICT["UID"]
+    return find_to_env("uid")
