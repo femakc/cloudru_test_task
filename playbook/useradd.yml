@@ -22,8 +22,7 @@
       authorized_key:
         user        : "{{ username }}"
         state       : present
-        key         : "{{ lookup('file', lookup('env','HOME') + '/Dev/cloudru_test_task/playbook/ssh_keys/id_rsa.pub') }}"
-#        key         : "{{ lookup('file', lookup('env','HOME') + '<Прописать путь>/playbook/ssh_keys/id_rsa.pub') }}"
+        key         : "{{ lookup('file', lookup('env','HOME') + '<Прописать путь>/playbook/ssh_keys/id_rsa.pub') }}"
 
     - name:  Disable allow login only with publickey.publickey
       lineinfile:

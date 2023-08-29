@@ -11,5 +11,5 @@ spec:
   ports:
     - name      : {{ .Release.Name }}-listener
       protocol  : TCP
-      port      : 8000
-      targetPort: 8000
+      port      : {{ .Values.port }}
+      targetPort: {{ .Values.port }}

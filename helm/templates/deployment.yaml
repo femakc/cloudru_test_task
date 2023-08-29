@@ -20,25 +20,25 @@ spec:
           image: {{ .Values.container.image}}
           imagePullPolicy: IfNotPresent
           env:
-            - name: UID # fixed
+            - name: UID
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.uid
-            - name: AUTHOR # fixed
+            - name: AUTHOR
               value: {{ .Values.author.name }}
           ports:
-            - containerPort: 8000
+            - containerPort: {{ .Values.container.port }}
 
-#          livenessProbe:
-#            httpGet:
-#              path: /author
-#              port: 8000
-#            initialDelaySeconds: 10
-#            periodSeconds: 10
-#
-#          readinessProbe:
-#            httpGet:
-#              path: /hostname
-#              port: 8000
-#            initialDelaySeconds: 10
-#            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.endpoints.author }}
+              port: {{ .Values.container.port }}
+            initialDelaySeconds: {{ .Values.test_time }}
+            periodSeconds: {{ .Values.test_time }}
+
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.endpoints.hostname }}
+              port: {{ .Values.container.port }}
+            initialDelaySeconds: {{ .Values.test_time }}
+            periodSeconds: {{ .Values.test_time }}
